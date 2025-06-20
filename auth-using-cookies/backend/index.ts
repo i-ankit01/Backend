@@ -1,5 +1,5 @@
 import express from 'express'
-import jwt from 'jsonwebtoken'
+import jwt , { JwtPayload} from 'jsonwebtoken'
 import cookieParser from "cookie-parser"
 import cors from "cors"
 
@@ -35,10 +35,10 @@ app.get('/user', (req, res)=>{
     // Get the token
     const token = req.cookies.token;
     // Decode it using jwt.verify
-    const decoded = jwt.verify(token , JWT_SECRET)
+    const decoded = jwt.verify(token , JWT_SECRET) as JwtPayload
     // it will return the payload ({id : 1}) in this case and other things like assigned time and expiration time if it was given during creation of the token
 
-    const id = decoded.id;
+    const id:string = decoded.id;
     // you can fetch the real user's email
     res.send({
         "your id" : id
@@ -50,4 +50,6 @@ app.post("/logout", (req , res)=>{
     res.send("User logged out successful")
 })
 
-app.listen(3000)
+app.listen(3000, ()=>{
+    console.log("Server is running on port 3000")
+})
